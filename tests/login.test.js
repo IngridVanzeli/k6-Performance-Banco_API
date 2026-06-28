@@ -1,14 +1,15 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
+const post_login = JSON.parse(open('../fixtures/post_login.json'));
+
 
 export const options = {
   stages: [
-    {duration: '10s' ,target: 10},
+    {duration: '5s' ,target: 10},
     {duration: '20s' ,target: 10},
-    {duration: '10s' ,target: 30},
-    {duration: '20s' ,target: 30},
-    {duration: '20s' ,target: 0}
+    {duration: 's' ,target: 0},
   ],
+  //iterations: 1,
   thresholds: {
     http_req_duration: ['p(95)<=3000', 'max<5000'],
     http_req_failed: ['rate<0.1']
@@ -19,10 +20,7 @@ export default function () {
   
     const url = 'http://localhost:3000/login';
     
-    const payload = JSON.stringify({
-        username: "junior.lima",
-        senha: "123456"
-    });
+    const payload = JSON.stringify(post_login);
 
     const params = {
         headers: {
